@@ -48,6 +48,23 @@ export async function pickDirectory<OS extends SupportedPlatforms>(
   }
 }
 
+export async function saveToDirectory<OS extends SupportedPlatforms>(
+  params?: Pick<DocumentPickerOptions<OS>, 'presentationStyle' | 'transitionStyle' | 'path'>,
+): Promise<DirectoryPickerResponse | null> {
+  if (Platform.OS === 'ios') {
+    const result = await pick({
+      ...params,
+      mode: 'open',
+      allowMultiSelection: false,
+      type: ['public.folder'],
+      path: 
+    })
+    return { uri: result[0].uri }
+  } else {
+    return NativeDocumentPicker.pickDirectory()
+  }
+}
+
 export function pickSingle<OS extends SupportedPlatforms>(
   opts?: DocumentPickerOptions<OS>,
 ): Promise<DocumentPickerResponse> {
